@@ -48,8 +48,6 @@ Projeto Criado para controle de emissão de pedidos
 
 * Spring Fox 3.0.0
 
-* MySql Connector
-
 * ModelMapper versão 2.4.2
 
 * lombok
