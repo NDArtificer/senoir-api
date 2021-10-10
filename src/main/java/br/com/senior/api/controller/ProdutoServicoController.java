@@ -8,6 +8,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +32,7 @@ import br.com.senior.domain.model.ProdutoServico;
 import br.com.senior.domain.repository.ProdutoServicoRepository;
 import br.com.senior.domain.service.ProdutoServicoService;
 import io.swagger.annotations.Api;
+
 @Api(tags = "ProdutoServico")
 @RestController
 @RequestMapping("/produtoServico")
@@ -43,9 +48,16 @@ public class ProdutoServicoController {
 	private ProdutoServicoConverter produtoServicoConverter;
 
 	@GetMapping
-	private List<ProdutoServico> listar() {
-		return produtoServicoRepository.findAll();
+	private Page<ProdutoServicoOutputModel> listar(@PageableDefault(size = 5) Pageable pageable) {
+		Page<ProdutoServico> produtoServicoPage = produtoServicoRepository.findAll(pageable);
 
+		List<ProdutoServicoOutputModel> produtoServicoList = produtoServicoConverter
+				.toCollectionModel(produtoServicoPage.getContent());
+
+		Page<ProdutoServicoOutputModel> produtoServicoModel = new PageImpl<>(produtoServicoList, pageable,
+				produtoServicoPage.getTotalElements());
+
+		return produtoServicoModel;
 	}
 
 	@GetMapping("/{codigo}")

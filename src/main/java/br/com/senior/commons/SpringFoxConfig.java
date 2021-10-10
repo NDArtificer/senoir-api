@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +17,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.fasterxml.classmate.TypeResolver;
 
 import br.com.senior.api.exceptionhendler.Problem;
+import br.com.senior.api.model.output.PedidoOutputModel;
+import br.com.senior.api.model.output.ProdutoServicoOutputModel;
+import br.com.senior.commons.openapi.PedidoOutputModelOpenApi;
+import br.com.senior.commons.openapi.ProdutoServicoOutputModelOpenApi;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
@@ -47,6 +54,11 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 		            .globalResponses(HttpMethod.PATCH, globalPostPutResponseMessages())
 		            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 		            .additionalModels(typeresolver.resolve(Problem.class))
+		            .directModelSubstitute(Pageable.class, PageableModel.class)
+		            .alternateTypeRules(AlternateTypeRules.newRule(
+		            		typeresolver.resolve(Page.class, PedidoOutputModel.class), PedidoOutputModelOpenApi.class))
+		            .alternateTypeRules(AlternateTypeRules.newRule(
+		            		typeresolver.resolve(Page.class, ProdutoServicoOutputModel.class), ProdutoServicoOutputModelOpenApi.class))
 					.tags(new Tag("Pedidos", "Gerencia os Pedidos"),
 						  new Tag("ProdutoServico", "Catalogo de produtos e serviços"));
 	}

@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +43,16 @@ public class PedidosController {
 	private PedidoConverter pedidoConverter;
 
 	@GetMapping
-	public List<PedidoOutputModel> listar() {
+	public Page<PedidoOutputModel> listar(@PageableDefault(size = 5) Pageable pageable) {
 
-		return pedidoConverter.toCollectionModel(pedidoRepository.findAll());
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(pageable);
+
+		List<PedidoOutputModel> pedidoModel = pedidoConverter.toCollectionModel(pedidosPage.getContent());
+
+		Page<PedidoOutputModel> pedidoOutputPage = new PageImpl<>(pedidoModel, pageable,
+				pedidosPage.getTotalElements());
+
+		return pedidoOutputPage;
 
 	}
 
@@ -55,36 +66,35 @@ public class PedidosController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoOutputModel emitir(@RequestBody @Valid PedidoModelInput pedidoInput) {
-		
+
 		try {
 			Pedido pedido = pedidoConverter.toEntity(pedidoInput);
 			return pedidoConverter.toModel(pedidoService.emitir(pedido));
 		} catch (Exception e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
-		
-	} 
-	
+
+	}
+
 	@PutMapping("/{codigo}/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void confirmar(@PathVariable String codigo) {
 		pedidoService.confirmar(codigo);
 
 	}
-	
-	
+
 	@PutMapping("/{codigo}/cancelamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void cancelar(@PathVariable String codigo) {
 		pedidoService.cancelar(codigo);
 
 	}
-	
+
 	@PutMapping("/{codigo}/finalizacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void finalizar(@PathVariable String codigo) {
 		pedidoService.finalizar(codigo);
 
 	}
-	
+
 }
