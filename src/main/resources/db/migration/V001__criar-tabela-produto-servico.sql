@@ -8,6 +8,7 @@ create table produto_servico(
 	descricao varchar(100) not null,
 	preco decimal(10,2) not null,
 	tipo varchar(10) not null,
+	ativo boolean not null,
 	
 	
 	primary key(id)

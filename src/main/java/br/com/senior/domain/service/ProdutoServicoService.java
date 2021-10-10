@@ -62,4 +62,17 @@ public class ProdutoServicoService {
 				.orElseThrow(() -> new ProdutoNaoEncontradoException("Produto não encontrado, código inexistente!"));
 	}
 
+	@Transactional
+	public void ativar(String codigo) {
+		ProdutoServico produtoServico = buscar(codigo);
+		produtoServico.ativar();
+	}
+
+	@Transactional
+	public void inativar(String codigo) {
+		ProdutoServico produtoServico = buscar(codigo);
+		produtoServico.inativar();
+		
+	}
+
 }

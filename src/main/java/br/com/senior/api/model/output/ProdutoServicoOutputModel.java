@@ -16,5 +16,6 @@ public class ProdutoServicoOutputModel {
 	private String descricao;
 	private BigDecimal preco;
 	private Type tipo;
-
+	private Boolean ativo;
+	
 }

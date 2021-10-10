@@ -41,6 +41,26 @@ public class ProdutoServico {
 	@Enumerated(EnumType.STRING)
 	private Type tipo;
 	
+	
+	private Boolean ativo = Boolean.TRUE;
+	
+	
+	public void ativar() {
+		setAtivo(true);
+	}
+
+	public void inativar() {
+		setAtivo(false);
+	}
+	
+	
+	public boolean isInativo() {
+	    return !isAtivo();
+	}
+
+	public boolean isAtivo() {
+	    return this.ativo;
+	}
 
 	@PrePersist
 	private void gerarCodigo() {

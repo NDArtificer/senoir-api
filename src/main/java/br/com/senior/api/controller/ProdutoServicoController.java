@@ -103,4 +103,17 @@ public class ProdutoServicoController {
 		}
 	}
 
+	@PutMapping("/{codigo}/ativacao")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable String codigo) {
+		produtoServicoService.ativar(codigo);
+	}
+	
+	@DeleteMapping("/{codigo}/inativacao")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativar(@PathVariable String codigo) {
+		produtoServicoService.inativar(codigo);
+	}	
+	
+	
 }
