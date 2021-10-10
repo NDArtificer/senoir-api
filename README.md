@@ -27,7 +27,7 @@ Projeto Criado para controle de emissão de pedidos
 * PostgreSQL 11
 
 * Substitua no application.properties ${JDBC_DATASOURCE_URL} 
-	por : jdbc:postgresql://localhost:5432/senior_api?createDatabaseIfNotExist=true
+	por : jdbc:postgresql://localhost:5432/{DATABASE_NAME}
 
 * Substitua no application.properties ${JDBC_DATASOURCE_USERNAME} pelo usuario do banco
 
